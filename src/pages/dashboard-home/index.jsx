@@ -8,6 +8,7 @@ import CategoryCard from './components/CategoryCard';
 import EmptyState from './components/EmptyState';
 import LoadingSkeleton from './components/LoadingSkeleton';
 import SearchResults from './components/SearchResults';
+import { categoriesWithLinks } from '../../data/mockData';
 
 import Button from '../../components/ui/Button';
 
@@ -22,144 +23,7 @@ const DashboardHome = () => {
   const [draggedCategory, setDraggedCategory] = useState(null);
 
   // Mock data
-  const mockCategories = [
-    {
-      id: 1,
-      name: "AI Tools",
-      description: "Collection of artificial intelligence and machine learning tools for productivity",
-      icon: "Bot",
-      color: "#2563EB",
-      linkCount: 12,
-      lastUpdated: "2 hours ago",
-      previewLinks: [
-        {
-          id: 1,
-          title: "ChatGPT",
-          thumbnail: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=400&fit=crop"
-        },
-        {
-          id: 2,
-          title: "Midjourney",
-          thumbnail: "https://images.unsplash.com/photo-1686191128892-3b4e8b8b8b8b?w=400&h=400&fit=crop"
-        },
-        {
-          id: 3,
-          title: "Claude AI",
-          thumbnail: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=400&h=400&fit=crop"
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: "Design Resources",
-      description: "UI/UX design tools, inspiration, and resources",
-      icon: "Palette",
-      color: "#7C3AED",
-      linkCount: 8,
-      lastUpdated: "1 day ago",
-      previewLinks: [
-        {
-          id: 4,
-          title: "Figma",
-          thumbnail: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=400&fit=crop"
-        },
-        {
-          id: 5,
-          title: "Dribbble",
-          thumbnail: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400&h=400&fit=crop"
-        }
-      ]
-    },
-    {
-      id: 3,
-      name: "Development",
-      description: "Programming tutorials, documentation, and development tools",
-      icon: "Code",
-      color: "#059669",
-      linkCount: 15,
-      lastUpdated: "3 hours ago",
-      previewLinks: [
-        {
-          id: 6,
-          title: "GitHub",
-          thumbnail: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=400&h=400&fit=crop"
-        },
-        {
-          id: 7,
-          title: "Stack Overflow",
-          thumbnail: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=400&fit=crop"
-        },
-        {
-          id: 8,
-          title: "MDN Docs",
-          thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=400&fit=crop"
-        }
-      ]
-    },
-    {
-      id: 4,
-      name: "Learning",
-      description: "Online courses, tutorials, and educational content",
-      icon: "GraduationCap",
-      color: "#DC2626",
-      linkCount: 6,
-      lastUpdated: "5 days ago",
-      previewLinks: [
-        {
-          id: 9,
-          title: "Coursera",
-          thumbnail: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=400&fit=crop"
-        },
-        {
-          id: 10,
-          title: "Udemy",
-          thumbnail: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=400&fit=crop"
-        }
-      ]
-    },
-    {
-      id: 5,
-      name: "Productivity",
-      description: "Tools and apps to boost productivity and organization",
-      icon: "Zap",
-      color: "#F59E0B",
-      linkCount: 9,
-      lastUpdated: "1 week ago",
-      previewLinks: [
-        {
-          id: 11,
-          title: "Notion",
-          thumbnail: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=400&fit=crop"
-        },
-        {
-          id: 12,
-          title: "Trello",
-          thumbnail: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=400&fit=crop"
-        }
-      ]
-    },
-    {
-      id: 6,
-      name: "Entertainment",
-      description: "Movies, music, games, and entertainment platforms",
-      icon: "Play",
-      color: "#EC4899",
-      linkCount: 4,
-      lastUpdated: "2 weeks ago",
-      previewLinks: [
-        {
-          id: 13,
-          title: "Netflix",
-          thumbnail: "https://images.unsplash.com/photo-1489599735734-79b4169c4388?w=400&h=400&fit=crop"
-        },
-        {
-          id: 14,
-          title: "Spotify",
-          thumbnail: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop"
-        }
-      ]
-    }
-  ];
+  const mockCategories = categoriesWithLinks;
 
   const mockRecentLinks = [
     {
