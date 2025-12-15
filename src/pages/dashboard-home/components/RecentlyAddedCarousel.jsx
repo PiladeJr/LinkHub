@@ -3,7 +3,7 @@ import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
 
-const RecentlyAddedCarousel = ({ recentLinks, onLinkClick }) => {
+const RecentlyAddedCarousel = ({ recentLinks, onLinkClick, onToggleFavorite }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef(null);
 
@@ -65,10 +65,12 @@ const RecentlyAddedCarousel = ({ recentLinks, onLinkClick }) => {
         {recentLinks?.map((link) => (
           <div
             key={link?.id}
-            onClick={() => onLinkClick(link)}
-            className="flex-shrink-0 w-64 bg-muted/30 rounded-lg p-4 cursor-pointer transition-micro hover:bg-muted/50 hover:shadow-subtle"
+            className="flex-shrink-0 w-64 bg-muted/30 rounded-lg p-4 cursor-pointer transition-micro hover:bg-muted/50 hover:shadow-subtle group"
           >
-            <div className="flex items-start space-x-3">
+            <div 
+              onClick={() => onLinkClick(link)}
+              className="flex items-start space-x-3"
+            >
               <div className="w-12 h-12 rounded-lg overflow-hidden bg-background border border-border flex-shrink-0">
                 <Image
                   src={link?.thumbnail}
@@ -77,9 +79,25 @@ const RecentlyAddedCarousel = ({ recentLinks, onLinkClick }) => {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-medium text-foreground text-sm truncate">
-                  {link?.title}
-                </h3>
+                <div className="flex items-start justify-between">
+                  <h3 className="font-medium text-foreground text-sm truncate flex-1">
+                    {link?.title}
+                  </h3>
+                  <button
+                    onClick={(e) => {
+                      e?.stopPropagation();
+                      onToggleFavorite?.(link?.id);
+                    }}
+                    className={`p-1 rounded-md transition-colors flex-shrink-0 ml-2 ${
+                      link?.isFavorite 
+                        ? 'text-accent hover:text-accent/80' 
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                    title={link?.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                  >
+                    <Icon name={link?.isFavorite ? 'Star' : 'StarOff'} size={14} />
+                  </button>
+                </div>
                 <p className="text-xs text-muted-foreground truncate mt-1">
                   {link?.url}
                 </p>

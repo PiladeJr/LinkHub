@@ -32,7 +32,8 @@ const DashboardHome = () => {
       url: "https://chat.openai.com",
       thumbnail: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=400&fit=crop",
       category: "AI Tools",
-      addedAt: "2 hours ago"
+      addedAt: "2 hours ago",
+      isFavorite: true
     },
     {
       id: 2,
@@ -40,7 +41,8 @@ const DashboardHome = () => {
       url: "https://figma.com",
       thumbnail: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=400&fit=crop",
       category: "Design Resources",
-      addedAt: "5 hours ago"
+      addedAt: "5 hours ago",
+      isFavorite: true
     },
     {
       id: 3,
@@ -48,7 +50,8 @@ const DashboardHome = () => {
       url: "https://react.dev",
       thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=400&fit=crop",
       category: "Development",
-      addedAt: "1 day ago"
+      addedAt: "1 day ago",
+      isFavorite: false
     },
     {
       id: 4,
@@ -56,35 +59,8 @@ const DashboardHome = () => {
       url: "https://notion.so",
       thumbnail: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=400&fit=crop",
       category: "Productivity",
-      addedAt: "2 days ago"
-    }
-  ];
-
-  const mockFavoriteLinks = [
-    {
-      id: 1,
-      title: "ChatGPT",
-      thumbnail: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=400&fit=crop"
-    },
-    {
-      id: 2,
-      title: "Figma",
-      thumbnail: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=400&fit=crop"
-    },
-    {
-      id: 3,
-      title: "GitHub",
-      thumbnail: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=400&h=400&fit=crop"
-    },
-    {
-      id: 4,
-      title: "Notion",
-      thumbnail: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=400&fit=crop"
-    },
-    {
-      id: 5,
-      title: "Dribbble",
-      thumbnail: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400&h=400&fit=crop"
+      addedAt: "2 days ago",
+      isFavorite: false
     }
   ];
 
@@ -93,7 +69,9 @@ const DashboardHome = () => {
     const timer = setTimeout(() => {
       setCategories(mockCategories);
       setRecentLinks(mockRecentLinks);
-      setFavoriteLinks(mockFavoriteLinks);
+      // Derive favorites from recent links
+      const favorites = mockRecentLinks?.filter(link => link?.isFavorite);
+      setFavoriteLinks(favorites);
       setIsLoading(false);
     }, 1500);
 
@@ -146,6 +124,29 @@ const DashboardHome = () => {
   const handleDuplicateCategory = (category) => {
     console.log('Duplicate category:', category);
     // This would create a copy of the category
+  };
+
+  const handleToggleFavorite = (linkId) => {
+    // Find the link and its current state
+    const link = recentLinks?.find(l => l?.id === linkId);
+    if (!link) return;
+
+    const willBeFavorite = !link?.isFavorite;
+
+    // Update recent links
+    const updatedRecentLinks = recentLinks?.map(l =>
+      l?.id === linkId ? { ...l, isFavorite: willBeFavorite } : l
+    );
+    setRecentLinks(updatedRecentLinks);
+
+    // Update favorite links based on the NEW state
+    if (willBeFavorite) {
+      // Add to favorites
+      setFavoriteLinks([...favoriteLinks, { ...link, isFavorite: true }]);
+    } else {
+      // Remove from favorites
+      setFavoriteLinks(favoriteLinks?.filter(l => l?.id !== linkId));
+    }
   };
 
   const handleCreateCategory = () => {
@@ -211,12 +212,14 @@ const DashboardHome = () => {
                   <RecentlyAddedCarousel
                     recentLinks={recentLinks}
                     onLinkClick={handleLinkClick}
+                    onToggleFavorite={handleToggleFavorite}
                   />
 
                   {/* Favorites Section */}
                   <FavoritesBar
                     favoriteLinks={favoriteLinks}
                     onLinkClick={handleLinkClick}
+                    onToggleFavorite={handleToggleFavorite}
                   />
 
                   {/* Categories Section */}
