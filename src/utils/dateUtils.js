@@ -1,4 +1,14 @@
 /**
+ * Helper function to format time unit with proper pluralization
+ * @param {number} value - The time value
+ * @param {string} unit - The time unit (e.g., 'minute', 'hour', 'day')
+ * @returns {string} Formatted string with proper pluralization
+ */
+const formatTimeUnit = (value, unit) => {
+  return `${value} ${value === 1 ? unit : unit + 's'} ago`;
+};
+
+/**
  * Formats a date into a relative time string (e.g., "2 hours ago", "3 days ago")
  * @param {string|Date} date - The date to format (ISO string or Date object)
  * @returns {string} Formatted relative time string
@@ -14,30 +24,29 @@ export const formatRelativeTime = (date) => {
     return 'Unknown';
   }
 
-  const diffInMs = now - past;
-  const diffInSeconds = Math.floor(diffInMs / 1000);
-  const diffInMinutes = Math.floor(diffInSeconds / 60);
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  const diffInDays = Math.floor(diffInHours / 24);
-  const diffInWeeks = Math.floor(diffInDays / 7);
-  const diffInMonths = Math.floor(diffInDays / 30);
-  const diffInYears = Math.floor(diffInDays / 365);
+  const diffInSeconds = Math.floor((now - past) / 1000);
 
-  if (diffInSeconds < 60) {
-    return 'just now';
-  } else if (diffInMinutes < 60) {
-    return `${diffInMinutes} ${diffInMinutes === 1 ? 'minute' : 'minutes'} ago`;
-  } else if (diffInHours < 24) {
-    return `${diffInHours} ${diffInHours === 1 ? 'hour' : 'hours'} ago`;
-  } else if (diffInDays < 7) {
-    return `${diffInDays} ${diffInDays === 1 ? 'day' : 'days'} ago`;
-  } else if (diffInWeeks < 4) {
-    return `${diffInWeeks} ${diffInWeeks === 1 ? 'week' : 'weeks'} ago`;
-  } else if (diffInMonths < 12) {
-    return `${diffInMonths} ${diffInMonths === 1 ? 'month' : 'months'} ago`;
-  } else {
-    return `${diffInYears} ${diffInYears === 1 ? 'year' : 'years'} ago`;
+  // Time unit configurations: [seconds in unit, divisor, unit name, threshold]
+  const timeUnits = [
+    { seconds: 60, name: 'minute', divisor: 60 },
+    { seconds: 3600, name: 'hour', divisor: 3600 },
+    { seconds: 86400, name: 'day', divisor: 86400 },
+    { seconds: 604800, name: 'week', divisor: 604800 },
+    { seconds: 2592000, name: 'month', divisor: 2592000 },
+    { seconds: 31536000, name: 'year', divisor: 31536000 }
+  ];
+
+  if (diffInSeconds < 60) return 'just now';
+
+  // Find the appropriate time unit
+  for (let i = timeUnits.length - 1; i >= 0; i--) {
+    if (diffInSeconds >= timeUnits[i].seconds) {
+      const value = Math.floor(diffInSeconds / timeUnits[i].divisor);
+      return formatTimeUnit(value, timeUnits[i].name);
+    }
   }
+
+  return 'just now';
 };
 
 /**
