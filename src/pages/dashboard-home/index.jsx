@@ -8,7 +8,7 @@ import CategoryCard from './components/CategoryCard';
 import EmptyState from './components/EmptyState';
 import LoadingSkeleton from './components/LoadingSkeleton';
 import SearchResults from './components/SearchResults';
-import { categoriesWithLinks } from '../../data/mockData';
+import { categoriesWithLinks, mockCategoryLinks } from '../../data/mockData';
 
 import Button from '../../components/ui/Button';
 
@@ -25,53 +25,46 @@ const DashboardHome = () => {
   // Mock data
   const mockCategories = categoriesWithLinks;
 
-  const mockRecentLinks = [
-    {
-      id: 1,
-      title: "ChatGPT - OpenAI\'s Conversational AI",
-      url: "https://chat.openai.com",
-      thumbnail: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=400&fit=crop",
-      category: "AI Tools",
-      addedAt: "2 hours ago",
-      isFavorite: true
-    },
-    {
-      id: 2,
-      title: "Figma - Collaborative Design Tool",
-      url: "https://figma.com",
-      thumbnail: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=400&fit=crop",
-      category: "Design Resources",
-      addedAt: "5 hours ago",
-      isFavorite: true
-    },
-    {
-      id: 3,
-      title: "React Documentation",
-      url: "https://react.dev",
-      thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=400&fit=crop",
-      category: "Development",
-      addedAt: "1 day ago",
-      isFavorite: false
-    },
-    {
-      id: 4,
-      title: "Notion - All-in-one Workspace",
-      url: "https://notion.so",
-      thumbnail: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=400&fit=crop",
-      category: "Productivity",
-      addedAt: "2 days ago",
-      isFavorite: false
-    }
-  ];
+  // Helpers to derive data from the single source of truth (mockCategoryLinks)
+  const computeAllLinks = () => {
+    return Object.values(mockCategoryLinks).flat();
+  };
+
+  const computeRecentLinks = (limit = 6) => {
+    return computeAllLinks()
+      .slice() // copy
+      .sort((a, b) => {
+        // Primary sort: by date (most recent first)
+        const dateA = new Date(a.addedAt);
+        const dateB = new Date(b.addedAt);
+        const dateDiff = dateB - dateA;
+
+        if (dateDiff !== 0) {
+          return dateDiff;
+        }
+
+        // Secondary sort: if same date, favorites first
+        if (a.isFavorite !== b.isFavorite) {
+          return a.isFavorite ? -1 : 1;
+        }
+
+        // Tertiary sort: if still tied, alphabetical by title
+        return a.title.localeCompare(b.title);
+      })
+      .slice(0, limit);
+  };
+
+  const computeFavoriteLinks = () => {
+    return computeAllLinks().filter(l => !!l.isFavorite);
+  };
 
   // Simulate loading
   useEffect(() => {
     const timer = setTimeout(() => {
       setCategories(mockCategories);
-      setRecentLinks(mockRecentLinks);
-      // Derive favorites from recent links
-      const favorites = mockRecentLinks?.filter(link => link?.isFavorite);
-      setFavoriteLinks(favorites);
+      // Derive both lists from mockCategoryLinks to keep dates consistent
+      setRecentLinks(computeRecentLinks());
+      setFavoriteLinks(computeFavoriteLinks());
       setIsLoading(false);
     }, 1500);
 
@@ -83,7 +76,7 @@ const DashboardHome = () => {
     if (searchQuery?.trim()) {
       const allItems = [
         ...mockCategories?.map(cat => ({ ...cat, type: 'category' })),
-        ...mockRecentLinks?.map(link => ({ ...link, type: 'link' }))
+        ...recentLinks?.map(link => ({ ...link, type: 'link' }))
       ];
 
       const filtered = allItems?.filter(item =>

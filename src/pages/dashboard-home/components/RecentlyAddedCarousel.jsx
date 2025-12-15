@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
+import { formatRelativeTime } from '../../../utils/dateUtils';
 
 const RecentlyAddedCarousel = ({ recentLinks, onLinkClick, onToggleFavorite }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -106,7 +107,7 @@ const RecentlyAddedCarousel = ({ recentLinks, onLinkClick, onToggleFavorite }) =
                     {link?.category}
                   </span>
                   <span className="text-xs text-muted-foreground">
-                    {link?.addedAt}
+                    {formatRelativeTime(link?.addedAt)}
                   </span>
                 </div>
               </div>
