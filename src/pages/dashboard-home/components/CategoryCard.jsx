@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
+import { formatRelativeTime } from '../../../utils/dateUtils';
 
 const CategoryCard = ({ 
   category, 
@@ -141,7 +142,7 @@ const CategoryCard = ({
         {/* Last Updated */}
         <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
           <span className="text-xs text-muted-foreground">
-            Updated {category?.lastUpdated}
+            Updated {formatRelativeTime(category?.lastUpdated)}
           </span>
           <Icon name="ChevronRight" size={14} className="text-muted-foreground" />
         </div>

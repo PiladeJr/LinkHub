@@ -14,11 +14,12 @@ const FloatingActionButton = ({ onClick, className = '' }) => {
     <div className={`fixed bottom-6 right-6 z-50 ${className}`}>
       <Button
         variant="default"
-        size="lg"
+        size="icon"
         onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        iconName="Plus"
+        iconName="Link"
+        iconSize={24}
         className={`
           w-14 h-14 rounded-full shadow-elevated hover:shadow-card
           transition-all duration-300 ease-out

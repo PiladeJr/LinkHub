@@ -1,5 +1,3 @@
-// Shared mock data for categories and their links
-
 const mockCategoryLinks = {
   1: [
     {
@@ -98,48 +96,42 @@ const baseCategories = [
     name: "AI Tools",
     description: "Collection of artificial intelligence and machine learning tools for productivity",
     icon: "Bot",
-    color: "#2563EB",
-    lastUpdated: "2 hours ago"
+    color: "#2563EB"
   },
   {
     id: 2,
     name: "Design Resources",
     description: "UI/UX design tools, inspiration, and resources",
     icon: "Palette",
-    color: "#7C3AED",
-    lastUpdated: "1 day ago"
+    color: "#7C3AED"
   },
   {
     id: 3,
     name: "Development",
     description: "Programming tutorials, documentation, and development tools",
     icon: "Code",
-    color: "#059669",
-    lastUpdated: "3 hours ago"
+    color: "#059669"
   },
   {
     id: 4,
     name: "Learning",
     description: "Online courses, tutorials, and educational content",
     icon: "GraduationCap",
-    color: "#DC2626",
-    lastUpdated: "5 days ago"
+    color: "#DC2626"
   },
   {
     id: 5,
     name: "Productivity",
     description: "Tools and apps to boost productivity and organization",
     icon: "Zap",
-    color: "#F59E0B",
-    lastUpdated: "1 week ago"
+    color: "#F59E0B"
   },
   {
     id: 6,
     name: "Entertainment",
     description: "Movies, music, games, and entertainment platforms",
     icon: "Play",
-    color: "#EC4899",
-    lastUpdated: "2 weeks ago"
+    color: "#EC4899"
   }
 ];
 
@@ -152,10 +144,18 @@ const mapCategoriesWithLinks = (categories) =>
       thumbnail: link.thumbnail
     }));
 
+    // Find the most recent link date
+    let lastUpdated = null;
+    if (links.length > 0) {
+      const dates = links.map(link => new Date(link.addedAt));
+      lastUpdated = new Date(Math.max(...dates)).toISOString();
+    }
+
     return {
       ...category,
       linkCount: links.length,
-      previewLinks
+      previewLinks,
+      lastUpdated
     };
   });
 

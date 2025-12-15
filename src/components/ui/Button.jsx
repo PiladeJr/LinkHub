@@ -98,9 +98,10 @@ const Button = React.forwardRef(({
             {...props}
         >
             {loading && <LoadingSpinner />}
-            {iconName && iconPosition === 'left' && renderIcon()}
+            {!loading && iconName && !children && renderIcon()}
+            {!loading && iconName && children && iconPosition === 'left' && renderIcon()}
             {children}
-            {iconName && iconPosition === 'right' && renderIcon()}
+            {!loading && iconName && children && iconPosition === 'right' && renderIcon()}
         </Comp>
     );
 });
