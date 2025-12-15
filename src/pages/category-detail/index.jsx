@@ -6,6 +6,7 @@ import Input from '../../components/ui/Input';
 import Icon from '../../components/AppIcon';
 import Image from '../../components/AppImage';
 import { categoriesWithLinks, mockCategoryLinks } from '../../data/mockData';
+import { formatRelativeTime } from '../../utils/dateUtils';
 
 const CategoryDetail = () => {
   const { categoryId } = useParams();
@@ -178,7 +179,7 @@ const CategoryDetail = () => {
                   </div>
                   <div className="flex items-center space-x-1">
                     <Icon name="Clock" size={16} />
-                    <span>Updated {category?.lastUpdated}</span>
+                    <span>Updated {formatRelativeTime(category?.lastUpdated)}</span>
                   </div>
                 </div>
               </div>
@@ -251,7 +252,7 @@ const CategoryDetail = () => {
                         </p>
                         
                         <span className="text-xs text-muted-foreground flex-shrink-0 ml-4">
-                          Added {formatDate(link?.addedAt)}
+                          Added {formatRelativeTime(link?.addedAt)}
                         </span>
                       </div>
                     </div>
