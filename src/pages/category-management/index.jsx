@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/ui/Header';
 import FloatingActionButton from '../../components/ui/FloatingActionButton';
+import { getCategories, getLinksByCategory, addCategory, updateCategory, deleteCategory } from '../../data/linkStore';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Select from '../../components/ui/Select';
@@ -36,93 +37,24 @@ const CategoryManagement = () => {
   const [showImportExport, setShowImportExport] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  // Mock data
-  const mockCategories = [
-    {
-      id: 'ai-tools',
-      name: 'AI Tools',
-      description: 'Artificial Intelligence and Machine Learning tools for productivity and development',
-      color: '#2563EB',
-      icon: null,
-      parentId: null,
-      linkCount: 24,
-      childCount: 3,
-      isParent: true,
-      recentActivity: true,
-      createdAt: '2024-01-15T10:30:00Z',
-      updatedAt: '2024-08-01T14:20:00Z'
-    },
-    {
-      id: 'development',
-      name: 'Development',
-      description: 'Software development resources, tools, and documentation',
-      color: '#16A34A',
-      icon: null,
-      parentId: null,
-      linkCount: 18,
-      childCount: 2,
-      isParent: true,
-      recentActivity: false,
-      createdAt: '2024-02-10T09:15:00Z',
-      updatedAt: '2024-07-28T11:45:00Z'
-    },
-    {
-      id: 'design',
-      name: 'Design',
-      description: 'UI/UX design tools, inspiration, and resources',
-      color: '#DC2626',
-      icon: null,
-      parentId: null,
-      linkCount: 15,
-      childCount: 0,
-      isParent: false,
-      recentActivity: true,
-      createdAt: '2024-03-05T16:20:00Z',
-      updatedAt: '2024-08-02T08:30:00Z'
-    },
-    {
-      id: 'productivity',
-      name: 'Productivity',
-      description: 'Tools and apps to boost productivity and efficiency',
-      color: '#CA8A04',
-      icon: null,
-      parentId: null,
-      linkCount: 12,
-      childCount: 1,
-      isParent: true,
-      recentActivity: false,
-      createdAt: '2024-04-12T13:45:00Z',
-      updatedAt: '2024-07-30T15:10:00Z'
-    },
-    {
-      id: 'learning',
-      name: 'Learning',
-      description: 'Educational resources, courses, and tutorials',
-      color: '#9333EA',
-      icon: null,
-      parentId: null,
-      linkCount: 9,
-      childCount: 0,
-      isParent: false,
-      recentActivity: true,
-      createdAt: '2024-05-20T11:00:00Z',
-      updatedAt: '2024-08-03T12:15:00Z'
-    },
-    {
-      id: 'entertainment',
-      name: 'Entertainment',
-      description: 'Movies, music, games, and entertainment content',
-      color: '#0891B2',
-      icon: null,
-      parentId: null,
-      linkCount: 7,
-      childCount: 0,
-      isParent: false,
-      recentActivity: false,
-      createdAt: '2024-06-08T14:30:00Z',
-      updatedAt: '2024-07-25T09:20:00Z'
-    }
-  ];
+  // Derive categories from store with computed stats
+  const computeCategories = () => {
+    const cats = getCategories();
+    return (cats || []).map(cat => {
+      const links = getLinksByCategory(cat.id) || [];
+      const dates = links.map(l => new Date(l.addedAt).getTime());
+      const updatedAt = dates.length ? new Date(Math.max(...dates)).toISOString() : cat.updatedAt || cat.createdAt || new Date().toISOString();
+      return {
+        ...cat,
+        linkCount: links.length,
+        childCount: 0,
+        isParent: false,
+        recentActivity: links.length > 0,
+        createdAt: cat.createdAt || new Date().toISOString(),
+        updatedAt
+      };
+    });
+  };
 
   // Filter and sort options
   const sortOptions = [
@@ -144,8 +76,9 @@ const CategoryManagement = () => {
 
   // Initialize data
   useEffect(() => {
-    setCategories(mockCategories);
-    setFilteredCategories(mockCategories);
+    const initial = computeCategories();
+    setCategories(initial);
+    setFilteredCategories(initial);
   }, []);
 
   // Filter and search logic
@@ -207,7 +140,10 @@ const CategoryManagement = () => {
 
   // Category management functions
   const handleCreateCategory = async (categoryData) => {
-    setCategories(prev => [...prev, categoryData]);
+    addCategory({ name: categoryData?.name, color: categoryData?.color, description: categoryData?.description, icon: categoryData?.icon });
+    const next = computeCategories();
+    setCategories(next);
+    setFilteredCategories(next);
     setIsCreateModalOpen(false);
   };
 
@@ -217,30 +153,34 @@ const CategoryManagement = () => {
   };
 
   const handleUpdateCategory = async (categoryData) => {
-    setCategories(prev => prev?.map(cat => 
-      cat?.id === categoryData?.id ? categoryData : cat
-    ));
+    updateCategory(categoryData?.id, {
+      name: categoryData?.name,
+      description: categoryData?.description,
+      color: categoryData?.color,
+      icon: categoryData?.icon
+    });
+    const next = computeCategories();
+    setCategories(next);
+    setFilteredCategories(next);
     setEditingCategory(null);
     setIsCreateModalOpen(false);
   };
 
   const handleDeleteCategory = async (category) => {
     if (window.confirm(`Are you sure you want to delete "${category?.name}"? This action cannot be undone.`)) {
-      setCategories(prev => prev?.filter(cat => cat?.id !== category?.id));
+      deleteCategory(category?.id);
+      const next = computeCategories();
+      setCategories(next);
+      setFilteredCategories(next);
       setSelectedCategories(prev => prev?.filter(id => id !== category?.id));
     }
   };
 
   const handleDuplicateCategory = async (category) => {
-    const duplicatedCategory = {
-      ...category,
-      id: `${category?.id}_copy_${Date.now()}`,
-      name: `${category?.name} (Copy)`,
-      linkCount: 0,
-      createdAt: new Date()?.toISOString(),
-      updatedAt: new Date()?.toISOString()
-    };
-    setCategories(prev => [...prev, duplicatedCategory]);
+    addCategory({ name: `${category?.name} (Copy)`, color: category?.color, description: category?.description, icon: category?.icon });
+    const next = computeCategories();
+    setCategories(next);
+    setFilteredCategories(next);
   };
 
   const handleMergeCategory = async (category) => {
@@ -272,7 +212,10 @@ const CategoryManagement = () => {
   // Bulk operations
   const handleBulkDelete = async (categoryIds) => {
     if (window.confirm(`Are you sure you want to delete ${categoryIds?.length} categories? This action cannot be undone.`)) {
-      setCategories(prev => prev?.filter(cat => !categoryIds?.includes(cat?.id)));
+      categoryIds.forEach(id => deleteCategory(id));
+      const next = computeCategories();
+      setCategories(next);
+      setFilteredCategories(next);
       setSelectedCategories([]);
     }
   };

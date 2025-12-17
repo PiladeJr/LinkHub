@@ -5,7 +5,7 @@ import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Icon from '../../components/AppIcon';
 import Image from '../../components/AppImage';
-import { categoriesWithLinks, mockCategoryLinks } from '../../data/mockData';
+import { getCategories, getLinksByCategory, toggleFavorite } from '../../data/linkStore';
 import { formatRelativeTime } from '../../utils/dateUtils';
 
 const CategoryDetail = () => {
@@ -26,12 +26,13 @@ const CategoryDetail = () => {
       // Use category from navigation state if available, otherwise find by ID
       let foundCategory = categoryFromState;
       if (!foundCategory) {
-        foundCategory = categoriesWithLinks?.find(cat => cat?.id === parseInt(categoryId));
+        const cats = getCategories();
+        foundCategory = cats?.find(cat => Number(cat?.id) === parseInt(categoryId));
       }
       
       if (foundCategory) {
         setCategory(foundCategory);
-        const categoryLinks = mockCategoryLinks?.[foundCategory?.id] || [];
+        const categoryLinks = getLinksByCategory(foundCategory?.id) || [];
         setLinks(categoryLinks);
         setFilteredLinks(categoryLinks);
       }
@@ -61,15 +62,18 @@ const CategoryDetail = () => {
   };
 
   const handleToggleFavorite = (linkId) => {
-    const updatedLinks = links?.map(link =>
-      link?.id === linkId ? { ...link, isFavorite: !link?.isFavorite } : link
+    toggleFavorite(category?.id, linkId);
+    const refreshed = getLinksByCategory(category?.id) || [];
+    setLinks(refreshed);
+    setFilteredLinks(
+      searchQuery?.trim()
+        ? refreshed?.filter(link =>
+            link?.title?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
+            link?.description?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
+            link?.url?.toLowerCase()?.includes(searchQuery?.toLowerCase())
+          )
+        : refreshed
     );
-    setLinks(updatedLinks);
-    
-    const updatedFilteredLinks = filteredLinks?.map(link =>
-      link?.id === linkId ? { ...link, isFavorite: !link?.isFavorite } : link
-    );
-    setFilteredLinks(updatedFilteredLinks);
   };
 
   const formatDate = (dateString) => {
@@ -179,7 +183,13 @@ const CategoryDetail = () => {
                   </div>
                   <div className="flex items-center space-x-1">
                     <Icon name="Clock" size={16} />
-                    <span>Updated {formatRelativeTime(category?.lastUpdated)}</span>
+                    <span>
+                      {(() => {
+                        const dates = (links || [])?.map(l => new Date(l.addedAt).getTime());
+                        const last = dates?.length ? new Date(Math.max(...dates)).toISOString() : null;
+                        return last ? `Updated ${formatRelativeTime(last)}` : 'No updates yet';
+                      })()}
+                    </span>
                   </div>
                 </div>
               </div>

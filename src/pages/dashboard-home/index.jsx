@@ -8,7 +8,7 @@ import CategoryCard from './components/CategoryCard';
 import EmptyState from './components/EmptyState';
 import LoadingSkeleton from './components/LoadingSkeleton';
 import SearchResults from './components/SearchResults';
-import { categoriesWithLinks, mockCategoryLinks } from '../../data/mockData';
+import { getCategoriesWithStats, getAllLinks, toggleFavorite } from '../../data/linkStore';
 
 import Button from '../../components/ui/Button';
 
@@ -22,12 +22,9 @@ const DashboardHome = () => {
   const [favoriteLinks, setFavoriteLinks] = useState([]);
   const [draggedCategory, setDraggedCategory] = useState(null);
 
-  // Mock data
-  const mockCategories = categoriesWithLinks;
-
-  // Helpers to derive data from the single source of truth (mockCategoryLinks)
+  // Helpers to derive data from the single source of truth (linkStore)
   const computeAllLinks = () => {
-    return Object.values(mockCategoryLinks).flat();
+    return getAllLinks();
   };
 
   const computeRecentLinks = (limit = 6) => {
@@ -60,13 +57,13 @@ const DashboardHome = () => {
 
   // Simulate loading
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setCategories(mockCategories);
-      // Derive both lists from mockCategoryLinks to keep dates consistent
+    const timer = setTimeout(async () => {
+      const cats = getCategoriesWithStats();
+      setCategories(cats);
       setRecentLinks(computeRecentLinks());
       setFavoriteLinks(computeFavoriteLinks());
       setIsLoading(false);
-    }, 1500);
+    }, 800);
 
     return () => clearTimeout(timer);
   }, []);
@@ -75,7 +72,7 @@ const DashboardHome = () => {
   useEffect(() => {
     if (searchQuery?.trim()) {
       const allItems = [
-        ...mockCategories?.map(cat => ({ ...cat, type: 'category' })),
+        ...categories?.map(cat => ({ ...cat, type: 'category' })),
         ...recentLinks?.map(link => ({ ...link, type: 'link' }))
       ];
 
@@ -90,7 +87,7 @@ const DashboardHome = () => {
     } else {
       setSearchResults([]);
     }
-  }, [searchQuery]);
+  }, [searchQuery, categories, recentLinks]);
 
   const handleCategoryClick = (category) => {
     navigate(`/category/${category?.id}`, { state: { category } });
@@ -126,20 +123,12 @@ const DashboardHome = () => {
 
     const willBeFavorite = !link?.isFavorite;
 
-    // Update recent links
-    const updatedRecentLinks = recentLinks?.map(l =>
-      l?.id === linkId ? { ...l, isFavorite: willBeFavorite } : l
-    );
-    setRecentLinks(updatedRecentLinks);
+    // Persist toggle in store
+    toggleFavorite(link.categoryId, linkId);
 
-    // Update favorite links based on the NEW state
-    if (willBeFavorite) {
-      // Add to favorites
-      setFavoriteLinks([...favoriteLinks, { ...link, isFavorite: true }]);
-    } else {
-      // Remove from favorites
-      setFavoriteLinks(favoriteLinks?.filter(l => l?.id !== linkId));
-    }
+    // Refresh computed lists from store
+    setRecentLinks(computeRecentLinks());
+    setFavoriteLinks(computeFavoriteLinks());
   };
 
   const handleCreateCategory = () => {

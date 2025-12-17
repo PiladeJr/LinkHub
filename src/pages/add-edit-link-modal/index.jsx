@@ -9,6 +9,7 @@ import CategorySelector from './components/CategorySelector';
 import TagManager from './components/TagManager';
 import ImageUploader from './components/ImageUploader';
 import AdvancedOptions from './components/AdvancedOptions';
+import { getCategories, getLinksByCategory, addLink, addCategory } from '../../data/linkStore';
 
 const AddEditLinkModal = () => {
   const navigate = useNavigate();
@@ -45,14 +46,17 @@ const AddEditLinkModal = () => {
   const [previewError, setPreviewError] = useState(null);
   const [errors, setErrors] = useState({});
 
-  // Mock data
-  const mockCategories = [
-    { id: 'cat_1', name: 'AI Tools', color: '#2563EB', linkCount: 12 },
-    { id: 'cat_2', name: 'Design Resources', color: '#10B981', linkCount: 8 },
-    { id: 'cat_3', name: 'Development', color: '#F59E0B', linkCount: 15 },
-    { id: 'cat_4', name: 'Learning', color: '#EF4444', linkCount: 6 },
-    { id: 'cat_5', name: 'Productivity', color: '#8B5CF6', linkCount: 10 }
-  ];
+  // Categories state from store with computed counts
+  const [categories, setCategories] = useState([]);
+  const computeCategoriesWithCounts = () => {
+    return getCategories().map(cat => ({
+      ...cat,
+      linkCount: (getLinksByCategory(cat.id) || []).length
+    }));
+  };
+  useEffect(() => {
+    setCategories(computeCategoriesWithCounts());
+  }, []);
 
   const mockAvailableTags = [
     'react', 'javascript', 'design', 'ai', 'productivity', 'tutorial', 
@@ -65,7 +69,7 @@ const AddEditLinkModal = () => {
     url: 'https://react.dev',
     title: 'React - The library for web and native user interfaces',
     description: 'React lets you build user interfaces out of individual pieces called components. Create your own React components like Thumbnail, LikeButton, and Video.',
-    categoryId: 'cat_3',
+    categoryId: 3,
     tags: ['react', 'javascript', 'frontend', 'documentation'],
     image: 'https://react.dev/favicon-32x32.png',
     advancedOptions: {
@@ -178,11 +182,17 @@ const AddEditLinkModal = () => {
     setIsSaving(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      console.log('Saving link:', formData);
-      
+      // Persist new link in local store
+      const payload = {
+        title: formData?.title,
+        url: formData?.url,
+        description: formData?.description,
+        thumbnail: formData?.image,
+        tags: formData?.tags,
+        advancedOptions: formData?.advancedOptions
+      };
+      addLink(formData?.categoryId, payload);
+
       // Navigate back to dashboard
       navigate('/dashboard-home', { 
         state: { 
@@ -216,8 +226,10 @@ const AddEditLinkModal = () => {
   };
 
   const handleCreateCategory = (newCategory) => {
-    // In a real app, this would make an API call
-    console.log('Creating new category:', newCategory);
+    const created = addCategory({ name: newCategory?.name, color: newCategory?.color });
+    setCategories(computeCategoriesWithCounts());
+    // Select the newly created category
+    handleInputChange('categoryId', created?.id);
   };
 
   if (isLoading) {
@@ -300,8 +312,8 @@ const AddEditLinkModal = () => {
           {/* Category Selection */}
           <CategorySelector
             value={formData?.categoryId}
-            onChange={(value) => handleInputChange('categoryId', value)}
-            categories={mockCategories}
+            onChange={(value) => handleInputChange('categoryId', Number(value))}
+            categories={categories}
             onCreateCategory={handleCreateCategory}
           />
 

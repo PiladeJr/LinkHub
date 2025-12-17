@@ -153,21 +153,6 @@ const Header = () => {
             iconName="Search"
           />
 
-          {/* Add Link Button */}
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => {
-              // This will be handled by the floating action button or modal trigger
-              console.log('Add link clicked');
-            }}
-            iconName="Plus"
-            iconPosition="left"
-            className="hidden sm:flex"
-          >
-            Add Link
-          </Button>
-
           {/* Mobile Menu Toggle */}
           <Button
             variant="ghost"
@@ -209,22 +194,7 @@ const Header = () => {
                 />
               </form>
             </div>
-
-            {/* Mobile Add Link */}
-            <div className="pt-2">
-              <Button
-                variant="default"
-                fullWidth
-                onClick={() => {
-                  console.log('Add link clicked');
-                  setIsMobileMenuOpen(false);
-                }}
-                iconName="Plus"
-                iconPosition="left"
-              >
-                Add Link
-              </Button>
-            </div>
+            {/* Mobile Add Link removed as per request */}
           </nav>
         </div>
       )}
