@@ -5,7 +5,7 @@ import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Icon from '../../components/AppIcon';
 import Image from '../../components/AppImage';
-import { getCategories, getLinksByCategory, toggleFavorite } from '../../data/linkStore';
+import { getCategories, getLinksByCategory, toggleFavorite, deleteLink } from '../../data/linkStore';
 import { formatRelativeTime } from '../../utils/dateUtils';
 
 const CategoryDetail = () => {
@@ -74,6 +74,23 @@ const CategoryDetail = () => {
           )
         : refreshed
     );
+  };
+
+  const handleDeleteLink = (linkId) => {
+    if (confirm('Are you sure you want to delete this link?')) {
+      deleteLink(category?.id, linkId);
+      const refreshed = getLinksByCategory(category?.id) || [];
+      setLinks(refreshed);
+      setFilteredLinks(
+        searchQuery?.trim()
+          ? refreshed?.filter(link =>
+              link?.title?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
+              link?.description?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
+              link?.url?.toLowerCase()?.includes(searchQuery?.toLowerCase())
+            )
+          : refreshed
+      );
+    }
   };
 
   const formatDate = (dateString) => {
@@ -246,6 +263,17 @@ const CategoryDetail = () => {
                             title={link?.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
                           >
                             <Icon name={link?.isFavorite ? 'Star' : 'StarOff'} size={16} />
+                          </button>
+
+                          <button
+                            onClick={(e) => {
+                              e?.stopPropagation();
+                              handleDeleteLink(link?.id);
+                            }}
+                            className="p-2 rounded-md transition-colors text-muted-foreground hover:text-destructive"
+                            title="Delete link"
+                          >
+                            <Icon name="Trash2" size={16} />
                           </button>
                           
                           <Icon name="ExternalLink" size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />

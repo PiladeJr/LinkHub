@@ -182,9 +182,16 @@ const AddEditLinkModal = () => {
     if (!formData?.title || !userEditedTitle) {
       setFormData(prev => ({
         ...prev,
+        url: normalizedUrl,
         title: nextTitle
       }));
       setLastAutoTitle(nextTitle);
+    } else {
+      // Even if title was edited, still update URL
+      setFormData(prev => ({
+        ...prev,
+        url: normalizedUrl
+      }));
     }
   };
 
