@@ -7,6 +7,7 @@ import CategoryManagement from './pages/category-management';
 import AddEditLinkModal from './pages/add-edit-link-modal';
 import DashboardHome from './pages/dashboard-home';
 import CategoryDetail from './pages/category-detail';
+import AllLinks from './pages/all-links';
 
 const Routes = () => {
   return (
@@ -16,9 +17,10 @@ const Routes = () => {
       <RouterRoutes>
         {/* Define your route here */}
         <Route path="/" element={<DashboardHome />} />
+        <Route path="/dashboard-home" element={<DashboardHome />} />
+        <Route path="/all-links" element={<AllLinks />} />
         <Route path="/category-management" element={<CategoryManagement />} />
         <Route path="/add-edit-link-modal" element={<AddEditLinkModal />} />
-        <Route path="/dashboard-home" element={<DashboardHome />} />
         <Route path="/category/:categoryId" element={<CategoryDetail />} />
         <Route path="*" element={<NotFound />} />
       </RouterRoutes>

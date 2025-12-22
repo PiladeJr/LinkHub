@@ -19,6 +19,12 @@ const Header = () => {
       tooltip: 'View your organized link collections'
     },
     {
+      label: 'All Links',
+      path: '/all-links',
+      icon: 'Link',
+      tooltip: 'Browse all your saved links'
+    },
+    {
       label: 'Categories',
       path: '/category-management',
       icon: 'Folder',
@@ -95,10 +101,10 @@ const Header = () => {
             <button
               key={item?.path}
               onClick={() => handleNavigation(item?.path)}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-micro hover:bg-muted ${
+              className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-micro ${
                 isActivePath(item?.path)
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground hover:bg-primary'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
               title={item?.tooltip}
             >
