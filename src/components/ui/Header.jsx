@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Icon from '../AppIcon';
 import Button from './Button';
@@ -8,8 +8,32 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const getInitialTheme = () => {
+    try {
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return stored || (prefersDark ? 'dark' : 'light');
+    } catch {
+      return 'light';
+    }
+  };
+  const [theme, setTheme] = useState(getInitialTheme);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const applyTheme = (nextTheme) => {
+    const root = document.documentElement;
+    if (nextTheme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  };
+
+  useEffect(() => {
+    applyTheme(theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   const navigationItems = [
     {
@@ -79,6 +103,10 @@ const Header = () => {
     return location.pathname === path;
   };
 
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-100 bg-card border-b border-border shadow-subtle">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
@@ -116,6 +144,17 @@ const Header = () => {
 
         {/* Search and Actions */}
         <div className="flex items-center space-x-3">
+          {/* Theme Toggle */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleTheme}
+            iconName={theme === 'dark' ? 'Sun' : 'Moon'}
+            iconSize={20}
+            className="text-muted-foreground hover:text-foreground"
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          />
+
           {/* Desktop Search */}
           <div className="hidden md:block">
             {!isSearchExpanded ? (

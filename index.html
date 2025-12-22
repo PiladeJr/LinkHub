@@ -9,6 +9,38 @@
   <meta name="description" content="Web site created using create-react-app" />
   <link rel="icon" href="/favicon.ico" />
   <link rel="manifest" href="/manifest.json" />
+  <script>
+    (function() {
+      try {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = stored || (prefersDark ? 'dark' : 'light');
+        const root = document.documentElement;
+        root.dataset.theme = theme;
+        root.classList.add('notransition');
+
+        // Inline background/text to avoid flash before CSS loads
+        const style = document.createElement('style');
+        style.id = 'early-theme';
+        if (theme === 'dark') {
+          root.classList.add('dark');
+          root.style.colorScheme = 'dark';
+          style.innerHTML = 'html,body{background:#0F172A;color:#E2E8F0;}';
+        } else {
+          root.classList.remove('dark');
+          root.style.colorScheme = 'light';
+          style.innerHTML = 'html,body{background:#FAFAFA;color:#1E293B;}';
+        }
+        document.head.appendChild(style);
+
+        window.addEventListener('load', () => {
+          root.classList.remove('notransition');
+        });
+      } catch (e) {
+        // fail silently
+      }
+    })();
+  </script>
 <script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Flinkhub5106back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.6"></script>
 </head>
 
