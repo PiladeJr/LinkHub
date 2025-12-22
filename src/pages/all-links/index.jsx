@@ -51,13 +51,11 @@ const AllLinks = () => {
   useEffect(() => {
     let filtered = allLinks;
 
-    // Search filter
+    // Search filter 
     if (searchQuery?.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(link =>
-        link?.title?.toLowerCase()?.includes(query) ||
-        link?.description?.toLowerCase()?.includes(query) ||
-        link?.url?.toLowerCase()?.includes(query)
+        link?.title?.toLowerCase()?.startsWith(query)
       );
     }
 
@@ -169,14 +167,16 @@ const AllLinks = () => {
           </div>
 
           {/* Search */}
-          <div className="mb-6 flex gap-3 items-center justify-between">
-            <Input
-              type="search"
-              placeholder="Search links by title, description, or URL..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e?.target?.value)}
-              className="flex-1 bg-white dark:bg-slate-950 border-border"
-            />
+          <div className="mb-6 flex gap-3 items-center justify-between w-full">
+            <div className="w-4/5">
+              <Input
+                type="search"
+                placeholder="Search links by their title"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e?.target?.value)}
+                className="w-full bg-white dark:bg-slate-950 border-border"
+              />
+            </div>
             <Button
               variant="default"
               onClick={() => setShowFilters(!showFilters)}
