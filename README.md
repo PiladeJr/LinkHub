@@ -116,6 +116,13 @@ This program requires the following dependencies
    # or
    yarn start
    ```
+### 📦 Deployment
+
+Build the application for production:
+
+```bash
+npm run build
+```
 
 ### 💾 Data Persistence
 
@@ -204,6 +211,10 @@ linkhub/
 └── README.md                        # Project documentation
 ```
 
+following the first commit of the project you can clearly see that i also pushed the .env file...
+**WOOPS**.
+Well... it only countains mock api keys, so i'm gonna leave it as a guideline for possible api keys implementations and server/database setup. 
+
 ## 🧩 Adding Routes
 
 To add new routes to the application, update the `Routes.jsx` file:
@@ -239,23 +250,14 @@ This project uses Tailwind CSS for styling. The configuration includes:
 
 The app is built with responsive design using Tailwind CSS breakpoints. Making it suitable for most devices... At least i hope so
 
-
-## 📦 Deployment
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-## � License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## �🙏 Acknowledgments
+## 🙏 Acknowledgments
 
-- Built with [Rocket.new](https://rocket.new)
+- Framework built with [Rocket.new](https://rocket.new)
 - Powered by React and Vite
 - Styled with Tailwind CSS
+- Usage of Copilot throughout the development
 
-Built with ❤️ on Rocket.new
