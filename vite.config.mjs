@@ -16,6 +16,13 @@ export default defineConfig({
     port: "4028",
     host: "0.0.0.0",
     strictPort: true,
-    allowedHosts: ['.amazonaws.com']
+    allowedHosts: ['.amazonaws.com'],
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5175',
+        changeOrigin: true,
+        secure: false
+      }
+    }
   }
 });

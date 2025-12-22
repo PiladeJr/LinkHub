@@ -45,6 +45,9 @@ const AddEditLinkModal = () => {
   const [previewLoading, setPreviewLoading] = useState(false);
   const [previewError, setPreviewError] = useState(null);
   const [errors, setErrors] = useState({});
+  const [lastPreviewedUrl, setLastPreviewedUrl] = useState('');
+  const [lastAutoTitle, setLastAutoTitle] = useState('');
+  const [originalPreviewDescription, setOriginalPreviewDescription] = useState('');
 
   // Categories state from store with computed counts
   const [categories, setCategories] = useState([]);
@@ -84,8 +87,6 @@ const AddEditLinkModal = () => {
       expiryDate: ''
     }
   };
-
-  // Load existing link data if editing
   useEffect(() => {
     if (isEditing && editId) {
       setIsLoading(true);
@@ -103,16 +104,17 @@ const AddEditLinkModal = () => {
     }
   }, [isEditing, editId]);
 
-  // Generate link preview when URL changes
-  useEffect(() => {
-    if (formData?.url && isValidUrl(formData?.url) && !isEditing) {
-      generatePreview(formData?.url);
-    }
-  }, [formData?.url, isEditing]);
+  const normalizeUrl = (value) => {
+    if (!value) return '';
+    const trimmed = value.trim();
+    const hasProtocol = /^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(trimmed);
+    return hasProtocol ? trimmed : `https://${trimmed}`;
+  };
 
-  const isValidUrl = (string) => {
+  const isValidUrl = (value) => {
+    if (!value) return false;
     try {
-      new URL(string);
+      new URL(normalizeUrl(value));
       return true;
     } catch (_) {
       return false;
@@ -120,6 +122,9 @@ const AddEditLinkModal = () => {
   };
 
   const generatePreview = async (url) => {
+    const normalizedUrl = normalizeUrl(url);
+    if (!normalizedUrl) return null;
+    if (normalizedUrl === lastPreviewedUrl && previewData) return previewData;
     setPreviewLoading(true);
     setPreviewError(null);
 
@@ -127,29 +132,72 @@ const AddEditLinkModal = () => {
       // Simulate API call for link preview
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const domain = new URL(url)?.hostname;
+      const domain = new URL(normalizedUrl)?.hostname;
+      const base = domain.replace('www.', '').split('.')[0];
       const mockPreview = {
-        title: `${domain?.charAt(0)?.toUpperCase() + domain?.slice(1)} - Web Application`,
+        title: base ? base.charAt(0).toUpperCase() + base.slice(1) : domain,
         description: `Discover amazing content and resources on ${domain}. This website offers valuable information and tools for productivity and learning.`,
         image: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
         domain: domain
       };
 
       setPreviewData(mockPreview);
-      
-      // Auto-populate title if empty
-      if (!formData?.title) {
-        setFormData(prev => ({
-          ...prev,
-          title: mockPreview?.title
-        }));
-      }
+      setLastPreviewedUrl(normalizedUrl);
+      setOriginalPreviewDescription(mockPreview.description);
+      return mockPreview;
     } catch (error) {
       setPreviewError('Failed to generate preview');
+      return null;
     } finally {
       setPreviewLoading(false);
     }
   };
+
+  // Generate link preview when URL changes
+  useEffect(() => {
+    if (!formData?.url || isEditing) return;
+
+    const normalizedUrl = normalizeUrl(formData?.url);
+    const handle = setTimeout(() => {
+      generatePreview(normalizedUrl);
+    }, 300);
+
+    return () => clearTimeout(handle);
+  }, [formData?.url, isEditing]);
+
+  const handleUrlBlur = async () => {
+    if (!formData?.url || isEditing) return;
+
+    const normalizedUrl = normalizeUrl(formData?.url);
+    let preview = previewData;
+
+    if (!preview || normalizedUrl !== lastPreviewedUrl) {
+      preview = await generatePreview(normalizedUrl);
+    }
+
+    const nextTitle = preview?.title;
+    if (!nextTitle) return;
+
+    const userEditedTitle = formData?.title && formData?.title !== lastAutoTitle;
+    if (!formData?.title || !userEditedTitle) {
+      setFormData(prev => ({
+        ...prev,
+        title: nextTitle
+      }));
+      setLastAutoTitle(nextTitle);
+    }
+  };
+
+  // Update preview when title or description change
+  useEffect(() => {
+    if (previewData && !isEditing) {
+      setPreviewData(prev => ({
+        ...prev,
+        title: formData?.title || prev?.title,
+        description: formData?.description || originalPreviewDescription
+      }));
+    }
+  }, [formData?.title, formData?.description, isEditing, originalPreviewDescription]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -183,10 +231,11 @@ const AddEditLinkModal = () => {
 
     try {
       // Persist new link in local store
+      const normalizedUrl = normalizeUrl(formData?.url);
       const payload = {
         title: formData?.title,
-        url: formData?.url,
-        description: formData?.description,
+        url: normalizedUrl,
+        description: formData?.description || previewData?.description || '',
         thumbnail: formData?.image,
         tags: formData?.tags,
         advancedOptions: formData?.advancedOptions
@@ -215,6 +264,14 @@ const AddEditLinkModal = () => {
       ...prev,
       [field]: value
     }));
+    
+    // Update preview when image changes
+    if (field === 'image' && previewData && !isEditing) {
+      setPreviewData(prev => ({
+        ...prev,
+        image: value || prev?.image
+      }));
+    }
     
     // Clear error when user starts typing
     if (errors?.[field]) {
@@ -264,6 +321,7 @@ const AddEditLinkModal = () => {
             placeholder="https://example.com"
             value={formData?.url}
             onChange={(e) => handleInputChange('url', e?.target?.value)}
+            onBlur={handleUrlBlur}
             error={errors?.url}
             required
             disabled={isEditing}

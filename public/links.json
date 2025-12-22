@@ -84,9 +84,59 @@
         "category": "AI Tools",
         "addedAt": "2024-07-29T16:45:00Z",
         "isFavorite": false
+      },
+      {
+        "id": 1766236921087,
+        "addedAt": "2025-12-20T13:22:01.087Z",
+        "isFavorite": false,
+        "category":"AI Tools",
+        "title": "Rork",
+        "url": "https://www.rork.com",
+        "description": "create a mobile app using AI in minutes",
+        "thumbnail" : "https://www.google.com/s2/favicons?domain=www.rork.com&sz=64",
+        "tags" :[
+          "ai",
+          "tool"
+        ],
+        "advancedOptions":
+        {
+          "priority": "medium",
+          "privacy": "private",
+          "notes" : "",
+          "scheduledDate": "",
+          "isFavorite": false,
+          "trackClicks": true,
+          "notifications": false,
+          "autoArchive": false,
+          "expiryDate": ""
+        }
       }
     ],
-    "2": [
+    "2": [      
+      {
+        "id": 1765998853406,
+        "addedAt": "2025-12-17T19:14:13.406Z",
+        "isFavorite": false,
+        "category": "Design Resources",
+        "title": "React bits",
+        "url": "https://www.reactbits.dev",
+        "description": "a developer library for ui components",
+        "thumbnail": "https://www.google.com/s2/favicons?domain=www.reactbits.dev&sz=64",
+        "tags": [
+          "design"
+        ],
+        "advancedOptions": {
+          "priority": "medium",
+          "privacy": "private",
+          "notes": "",
+          "scheduledDate": "",
+          "isFavorite": false,
+          "trackClicks": true,
+          "notifications": false,
+          "autoArchive": false,
+          "expiryDate": ""
+        }
+      },
       {
         "id": 5,
         "title": "Figma - Collaborative Design Tool",
@@ -106,6 +156,32 @@
         "category": "Design Resources",
         "addedAt": "2024-08-01T13:30:00Z",
         "isFavorite": false
+      },
+      {
+        "id": 1766236171914,
+        "addedAt": "2025-12-20T13:09:31.914Z",
+        "isFavorite": false,
+        "category":"Design Resources",
+        "title": "Anime js",
+        "url": "https://www.animejs.com",
+        "description": "A fast and versatile JavaScript library to animate your websites",
+        "thumbnail" : "https://www.google.com/s2/favicons?domain=www.animejs.com&sz=64",
+        "tags" :[
+          "design",
+          "tutorial"
+        ],  
+        "advancedOptions":
+        {
+          "priority": "medium",
+          "privacy": "private",
+          "notes" : "",
+          "scheduledDate": "",
+          "isFavorite": false,
+          "trackClicks": true,
+          "notifications": false,
+          "autoArchive": false,
+          "expiryDate": ""
+        }
       }
     ],
     "3": [
@@ -128,10 +204,81 @@
         "category": "Development",
         "addedAt": "2024-08-02T15:25:00Z",
         "isFavorite": false
+      },
+      {
+        "id": 1765998853411,
+        "addedAt": "2025-12-17T13:48:45Z",
+        "isFavorite": false,
+        "category": "Development",
+        "title": "Creao AI",
+        "url": "https://www.creao.ai",
+        "description": "AI powered generator tool for full stack applications",
+        "thumbnail": "https://www.google.com/s2/favicons?domain=www.creao.ai&sz=64",
+        "tags": [
+          "development",
+          "ai"
+        ],
+        "advancedOptions": {    
+          "priority": "medium",
+          "privacy": "private",
+          "notes": "",
+          "scheduledDate": "",
+          "isFavorite": false,
+          "trackClicks": true,
+          "notifications": false,
+          "autoArchive": false,
+          "expiryDate": ""
+        } 
       }
     ],
-    "4": [],
-    "5": [],
+    "4": [
+      {
+        "id": 1765996166711,
+        "addedAt": "2025-12-17T18:29:26.711Z",
+        "isFavorite": true,
+        "category": "Learning",
+        "title": "domestika",
+        "url": "https://www.domestika.org/it",
+        "description": "Discover amazing content and resources on www.domestika.org. This website offers valuable information and tools for productivity and learning.",
+        "thumbnail": "https://www.google.com/s2/favicons?domain=www.domestika.org&sz=64",
+        "tags": [],
+        "advancedOptions": {
+          "priority": "medium",
+          "privacy": "private",
+          "notes": "",
+          "scheduledDate": "",
+          "isFavorite": false,
+          "trackClicks": true,
+          "notifications": false,
+          "autoArchive": false,
+          "expiryDate": ""
+        }
+      }
+    ],
+    "5": [
+      {
+        "id": 1766240656093,
+        "addedAt": "2025-12-20T14:24:16.093Z",
+        "isFavorite": false,
+        "category": "Productivity",
+        "title": "typing club",
+        "url": "https://www.typingclub.com",
+        "description": "TypingClub is the most effective way to learn how to type. It is web based and highly effective. TypingClub is (and will always be) free for both individuals",
+        "thumbnail": "https://www.google.com/s2/favicons?domain=www.typingclub.com&sz=64",
+        "tags": ["tutorial"],
+        "advancedOptions": {
+          "priority": "medium",
+          "privacy": "private",
+          "notes": "",
+          "scheduledDate": "",
+          "isFavorite": false,
+          "trackClicks": true,
+          "notifications": false,
+          "autoArchive": false,
+          "expiryDate": ""
+        }
+      }
+    ],
     "6": []
   }
 }
