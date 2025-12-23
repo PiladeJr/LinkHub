@@ -89,7 +89,7 @@ This program requires the following dependencies
    git clone https://github.com/PiladeJr/LinkHub
    ```
 
-2. Navigate the project directories
+2. Navigate to the project directories
    ```bash
    cd linkhub
    ```
