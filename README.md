@@ -9,13 +9,23 @@ A modern React-based project to manage all your links in one place
 <p align="left">
   <!-- Last commit --><a href="https://github.com/PiladeJr/LinkHub/commits/master"><img alt="Last commit" src="https://img.shields.io/github/last-commit/PiladeJr/LinkHub?logo=github&label=last%20commit" /></a>
   <!-- Languages count --><a href="https://github.com/PiladeJr/LinkHub"><img alt="Languages count" src="https://img.shields.io/github/languages/count/PiladeJr/LinkHub?label=languages" /></a>
-  <!-- Top language percentage (snapshot) --><a href="https://github.com/PiladeJr/LinkHub"><img alt="Top language percentage" src="https://img.shields.io/badge/Top%20language-JavaScript%2098.6%25-F7DF1E?logo=javascript&logoColor=000" /></a>
+  <!-- Top language percentage (snapshot) --><a href="https://github.com/PiladeJr/LinkHub"><img alt="Top language percentage" src="https://img.shields.io/badge/Top%20language-JavaScript%2097.3%25-F7DF1E?logo=javascript&logoColor=000" /></a>
   <!-- License --><a href="https://github.com/PiladeJr/LinkHub/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/PiladeJr/LinkHub?label=license" /></a>
 </p>
 
 Built with the following tools and technologies
 
-[![JSON](https://img.shields.io/badge/JSON-5E5C5C?logo=json&logoColor=white)](https://www.json.org/) [![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/) [![D3.js](https://img.shields.io/badge/D3.js-F9A03C?logo=d3.js&logoColor=white)](https://d3js.org/) [![Markdown](https://img.shields.io/badge/Markdown-000000?logo=markdown&logoColor=white)](https://daringfireball.net/projects/markdown/) [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000)](https://developer.mozilla.org/docs/Web/JavaScript) [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://react.dev/) [![React Router v6](https://img.shields.io/badge/React%20Router%20v6-CA4245?logo=reactrouter&logoColor=white)](https://reactrouter.com/) [![Redux](https://img.shields.io/badge/Redux-764ABC?logo=redux&logoColor=white)](https://redux.js.org/) [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/) [![PostCSS](https://img.shields.io/badge/PostCSS-DD3A0A?logo=postcss&logoColor=white)](https://postcss.org/)
+[![JSON](https://img.shields.io/badge/JSON-5E5C5C?logo=json&logoColor=white)](https://www.json.org/)
+[![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/)
+[![D3.js](https://img.shields.io/badge/D3.js-F9A03C?logo=d3.js&logoColor=white)](https://d3js.org/)
+[![Markdown](https://img.shields.io/badge/Markdown-000000?logo=markdown&logoColor=white)](https://daringfireball.net/projects/markdown/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000)](https://developer.mozilla.org/docs/Web/JavaScript)
+[![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://react.dev/)
+[![React Router v6](https://img.shields.io/badge/React%20Router%20v6-CA4245?logo=reactrouter&logoColor=white)](https://reactrouter.com/)
+[![Redux](https://img.shields.io/badge/Redux-764ABC?logo=redux&logoColor=white)](https://redux.js.org/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![PostCSS](https://img.shields.io/badge/PostCSS-DD3A0A?logo=postcss&logoColor=white)](https://postcss.org/)
 
 
 ## Table of Contents
