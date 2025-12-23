@@ -1,4 +1,8 @@
-# LinkHub
+
+
+
+
+# <img src="public/LinkHub.ico" alt="LinkHub logo" width="42" height="42" style="vertical-align: middle;" /> LinkHub
 
 A modern React-based project to manage all your links in one place
 
@@ -43,12 +47,12 @@ Built with the following tools and technologies
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Usage](#usage)
+  - [Deployment](#deployment)
   - [Data Persistence](#data-persistence)
 - [Project Structure](#project-structure)
 - [Adding Routes](#adding-routes)
 - [Styling](#styling)
 - [Responsive Design](#responsive-design)
-- [Deployment](#deployment)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 
@@ -70,7 +74,7 @@ Built with modern technologies like React 18, Vite, Redux Toolkit, TailwindCSS, 
 </ul>
 
 
-## 🚀 Features
+## 🚀 Features <a id="features"></a>
 
 - **React 18** - React version with improved rendering and concurrent features
 - **Vite** - Lightning-fast build tool and development server
@@ -84,13 +88,13 @@ Built with modern technologies like React 18, Vite, Redux Toolkit, TailwindCSS, 
 
 ## Getting Started
 
-### 📋 Prerequisites
+### 📋 Prerequisites <a id="prerequisites"></a>
 
 This program requires the following dependencies
 - Node.js (v14.x or higher)
 - <strong>Packate manager: </strong>npm or yarn
  
-### 🛠️ Installation
+### 🛠️ Installation <a id="installation"></a>
 
 1. Clone the repository:
    ```bash
@@ -109,14 +113,14 @@ This program requires the following dependencies
    yarn install
    ```
    
-### ▶️ Usage
+### ▶️ Usage <a id="usage"></a>
  Run the project with:
    ```bash
    npm start
    # or
    yarn start
    ```
-### 📦 Deployment
+### 📦 Deployment <a id="deployment"></a>
 
 Build the application for production:
 
@@ -124,7 +128,7 @@ Build the application for production:
 npm run build
 ```
 
-### 💾 Data Persistence
+### 💾 Data Persistence <a id="data-persistence"></a>
 
 LinkHub offers two deployment modes to suit different use cases:
 
@@ -146,7 +150,7 @@ For both versions, there is a function built in the app that lets you export the
 <br>
 > **Note:** The main version deployed is browser-based. If you need server-side persistence, refer to the server setup instructions in my second branch `https://github.com/PiladeJr/LinkHub/tree/local-json-version`.
 
-## 📁 Project Structure
+## 📁 Project Structure <a id="project-structure"></a>
 
 ```
 linkhub/
@@ -215,7 +219,7 @@ following the first commit of the project you can clearly see that i also pushed
 **WOOPS**.
 Well... it only countains mock api keys, so i'm gonna leave it as a guideline for possible api keys implementations and server/database setup. 
 
-## 🧩 Adding Routes
+## 🧩 Adding Routes <a id="adding-routes"></a>
 
 To add new routes to the application, update the `Routes.jsx` file:
 
@@ -235,7 +239,7 @@ const ProjectRoutes = () => {
 };
 ```
 
-## 🎨 Styling
+## 🎨 Styling <a id="styling"></a>
 
 This project uses Tailwind CSS for styling. The configuration includes:
 
@@ -246,7 +250,7 @@ This project uses Tailwind CSS for styling. The configuration includes:
 - Fluid typography for responsive text
 - Animation utilities
 
-## 📱 Responsive Design
+## 📱 Responsive Design <a id="responsive-design"></a>
 
 The app is built with responsive design using Tailwind CSS breakpoints. Making it suitable for most devices... At least i hope so
 
@@ -254,7 +258,7 @@ The app is built with responsive design using Tailwind CSS breakpoints. Making i
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## 🙏 Acknowledgments <a id="acknowledgments"></a>
 
 - Framework built with [Rocket.new](https://rocket.new)
 - Powered by React and Vite
