@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Button from '../../../components/ui/Button';
 import { formatRelativeTime } from '../../../utils/dateUtils';
+import Modal from '../../../components/ui/Modal';
+import { Checkbox, CheckboxGroup } from '../../../components/ui/Checkbox';
+import { getAllLinks } from '../../../data/linkStore';
 
 import Icon from '../../../components/AppIcon';
 
@@ -11,6 +14,9 @@ const ImportExportPanel = ({ categories, onImport, isVisible, onToggle }) => {
   const [lastExportDate, setLastExportDate] = useState(null);
   const [lastImportDate, setLastImportDate] = useState(null);
   const fileInputRef = useRef(null);
+  const [exportModalOpen, setExportModalOpen] = useState(false);
+  const [includeCategories, setIncludeCategories] = useState(true);
+  const [includeLinks, setIncludeLinks] = useState(true);
 
   // Load dates from localStorage on mount
   useEffect(() => {
@@ -34,39 +40,58 @@ const ImportExportPanel = ({ categories, onImport, isVisible, onToggle }) => {
     }
   }, [lastImportDate]);
 
-  const handleExport = async () => {
+  const handleExport = () => setExportModalOpen(true);
+
+  const handleConfirmExport = async () => {
+    if (!includeCategories && !includeLinks) return; // nothing selected
     setIsExporting(true);
-    
     try {
-      const exportData = {
-        version: '1.0',
-        exportDate: new Date()?.toISOString(),
-        categories: categories?.map(cat => ({
+      const payload = { version: '1.0', exportDate: new Date().toISOString() };
+      if (includeCategories) {
+        payload.categories = categories?.map(cat => ({
           id: cat?.id,
           name: cat?.name,
           description: cat?.description,
           color: cat?.color,
           icon: cat?.icon,
-          parentId: cat?.parentId,
-          linkCount: cat?.linkCount,
+          parentId: cat?.parentId ?? null,
           createdAt: cat?.createdAt,
           updatedAt: cat?.updatedAt
-        })),
-      };
-      setLastExportDate(new Date()?.toISOString());
+        }));
+      }
+      if (includeLinks) {
+        const allLinks = await getAllLinks();
+        payload.links = allLinks?.map(l => ({
+          id: l?.id,
+          title: l?.title,
+          url: l?.url,
+          description: l?.description,
+          thumbnail: l?.thumbnail,
+          categoryId: l?.categoryId,
+          category: l?.category,
+          isFavorite: !!l?.isFavorite,
+          addedAt: l?.addedAt
+        }));
+      }
 
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-        type: 'application/json'
-      });
-      
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `linkhub-categories-${new Date()?.toISOString()?.split('T')?.[0]}.json`;
-      document.body?.appendChild(a);
-      a?.click();
-      document.body?.removeChild(a);
+      const datePart = new Date().toISOString().split('T')[0];
+      const namePart = includeCategories && includeLinks
+        ? 'data'
+        : includeCategories
+          ? 'categories'
+          : 'links';
+      a.download = `linkhub-${namePart}-${datePart}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
+
+      setLastExportDate(new Date().toISOString());
+      setExportModalOpen(false);
     } catch (error) {
       console.error('Export failed:', error);
     } finally {
@@ -182,6 +207,7 @@ const ImportExportPanel = ({ categories, onImport, isVisible, onToggle }) => {
   }
 
   return (
+    <>
     <div className="mb-8 bg-card rounded-lg border border-border p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-foreground flex items-center space-x-2">
@@ -215,7 +241,7 @@ const ImportExportPanel = ({ categories, onImport, isVisible, onToggle }) => {
               iconPosition="left"
               fullWidth
             >
-              Export All Categories ({categories?.length})
+              Export Data
             </Button>
             
             <Button
@@ -320,6 +346,50 @@ const ImportExportPanel = ({ categories, onImport, isVisible, onToggle }) => {
         </div>
       </div>
     </div>
+    
+    {/* Export Options Modal */}
+    <Modal
+      isOpen={exportModalOpen}
+      onClose={() => setExportModalOpen(false)}
+      title="Export Options"
+      size="default"
+    >
+      <div className="space-y-4">
+        <p className="text-sm text-muted-foreground">
+          Choose what to include in your export. Data will be downloaded as a JSON file.
+        </p>
+        <CheckboxGroup>
+          <Checkbox
+            checked={includeCategories}
+            onChange={() => setIncludeCategories(prev => !prev)}
+            label="Categories"
+            description="Names, descriptions, colors, icons, timestamps"
+          />
+          <Checkbox
+            checked={includeLinks}
+            onChange={() => setIncludeLinks(prev => !prev)}
+            label="Links"
+            description="Titles, URLs, thumbnails, favorites, timestamps"
+          />
+        </CheckboxGroup>
+        <div className="flex justify-end gap-2 pt-2">
+          <Button variant="outline" onClick={() => setExportModalOpen(false)}>
+            Cancel
+          </Button>
+          <Button
+            variant="default"
+            onClick={handleConfirmExport}
+            disabled={!includeCategories && !includeLinks}
+            loading={isExporting}
+            iconName="Download"
+            iconPosition="left"
+          >
+            Export
+          </Button>
+        </div>
+      </div>
+    </Modal>
+    </>
   );
 };
 
