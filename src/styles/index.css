@@ -10,3 +10,48 @@ body {
   font-family: inherit;
   margin: unset;
 }
+
+/* Custom Scrollbar Styling */
+/* For Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 6px;
+  border: 3px solid hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2563eb;
+}
+
+/* Dark mode adjustments */
+.dark ::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #60a5fa;
+  border: 3px solid hsl(var(--background));
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6;
+}
+
+/* For Firefox */
+* {
+  scrollbar-color: #3b82f6 hsl(var(--background));
+  scrollbar-width: auto;
+}
+
+.dark * {
+  scrollbar-color: #60a5fa hsl(var(--background));
+}

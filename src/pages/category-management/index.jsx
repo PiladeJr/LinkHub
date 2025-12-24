@@ -32,10 +32,13 @@ const CategoryManagement = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   
-  // Panel visibility states
-  const [showAnalytics, setShowAnalytics] = useState(false);
-  const [showImportExport, setShowImportExport] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  // Panel visibility states - single active panel
+  const [activePanel, setActivePanel] = useState(null); // 'analytics', 'import-export', 'suggestions', or null
+
+  // Toggle panel handler - closes current and opens the clicked one
+  const togglePanel = (panelName) => {
+    setActivePanel(activePanel === panelName ? null : panelName);
+  };
 
   // Derive categories from store with computed stats
   const computeCategories = () => {
@@ -264,9 +267,9 @@ const CategoryManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen flex flex-col bg-background">
       <Header />
-      <main className="pt-16">
+      <main className="flex-1 overflow-y-auto mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Page Header */}
           <div className="mb-8">
@@ -340,28 +343,66 @@ const CategoryManagement = () => {
             </div>
           </div>
 
-          {/* Smart Suggestions */}
-          <SmartSuggestions
-            categories={categories}
-            onCreateCategory={handleCreateCategory}
-            isVisible={showSuggestions}
-            onToggle={() => setShowSuggestions(!showSuggestions)}
-          />
+          {/* Panel Controls - Inline Buttons */}
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            <Button
+              variant={activePanel === 'analytics' ? 'default' : 'outline'}
+              onClick={() => togglePanel('analytics')}
+              iconName="BarChart3"
+              iconPosition="left"
+              size="sm"
+              className={activePanel !== 'analytics' ? 'bg-white dark:bg-slate-950 border border-gray-300 dark:border-border' : ''}
+            >
+              Analytics
+            </Button>
+            <Button
+              variant={activePanel === 'import-export' ? 'default' : 'outline'}
+              onClick={() => togglePanel('import-export')}
+              iconName="FileJson"
+              iconPosition="left"
+              size="sm"
+              className={activePanel !== 'import-export' ? 'bg-white dark:bg-slate-950 border border-gray-300 dark:border-border' : ''}
+            >
+              Import/Export
+            </Button>
+            <Button
+              variant={activePanel === 'suggestions' ? 'default' : 'outline'}
+              onClick={() => togglePanel('suggestions')}
+              iconName="Lightbulb"
+              iconPosition="left"
+              size="sm"
+              className={activePanel !== 'suggestions' ? 'bg-white dark:bg-slate-950 border border-gray-300 dark:border-border' : ''}
+            >
+              Smart Suggestions
+            </Button>
+          </div>
 
-          {/* Analytics */}
-          <CategoryAnalytics
-            categories={categories}
-            isVisible={showAnalytics}
-            onToggle={() => setShowAnalytics(!showAnalytics)}
-          />
+          {/* Single Panel Display */}
+          {activePanel === 'analytics' && (
+            <CategoryAnalytics
+              categories={categories}
+              isVisible={true}
+              onToggle={() => togglePanel('analytics')}
+            />
+          )}
 
-          {/* Import/Export */}
-          <ImportExportPanel
-            categories={categories}
-            onImport={handleImportCategories}
-            isVisible={showImportExport}
-            onToggle={() => setShowImportExport(!showImportExport)}
-          />
+          {activePanel === 'import-export' && (
+            <ImportExportPanel
+              categories={categories}
+              onImport={handleImportCategories}
+              isVisible={true}
+              onToggle={() => togglePanel('import-export')}
+            />
+          )}
+
+          {activePanel === 'suggestions' && (
+            <SmartSuggestions
+              categories={categories}
+              onCreateCategory={handleCreateCategory}
+              isVisible={true}
+              onToggle={() => togglePanel('suggestions')}
+            />
+          )}
 
           {/* Search and Filters */}
           <div className="bg-card rounded-lg border border-border p-6 mb-8">

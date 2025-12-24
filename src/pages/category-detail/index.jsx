@@ -153,9 +153,9 @@ const CategoryDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen flex flex-col bg-background">
       <Header />
-      <main className="pt-16 px-4 lg:px-6 pb-8">
+      <main className="flex-1 overflow-y-auto mt-16 px-4 lg:px-6 pb-8">
         <div className="max-w-4xl mx-auto py-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">

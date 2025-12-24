@@ -169,9 +169,9 @@ const DashboardHome = () => {
   const hasData = categories?.length > 0 || recentLinks?.length > 0;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen flex flex-col bg-background">
       <Header />
-      <main className="pt-16 px-4 lg:px-6 pb-20">
+      <main className="flex-1 overflow-y-auto mt-16 px-4 lg:px-6 pb-20">
         <div className="max-w-7xl mx-auto py-6">
           {/* Search Results */}
           {searchQuery && (
