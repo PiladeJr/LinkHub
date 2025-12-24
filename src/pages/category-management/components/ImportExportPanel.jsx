@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Button from '../../../components/ui/Button';
+import { formatRelativeTime } from '../../../utils/dateUtils';
 
 import Icon from '../../../components/AppIcon';
 
@@ -7,7 +8,31 @@ const ImportExportPanel = ({ categories, onImport, isVisible, onToggle }) => {
   const [isImporting, setIsImporting] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [importError, setImportError] = useState('');
+  const [lastExportDate, setLastExportDate] = useState(null);
+  const [lastImportDate, setLastImportDate] = useState(null);
   const fileInputRef = useRef(null);
+
+  // Load dates from localStorage on mount
+  useEffect(() => {
+    const savedExportDate = localStorage.getItem('lastExportDate');
+    const savedImportDate = localStorage.getItem('lastImportDate');
+    if (savedExportDate) setLastExportDate(savedExportDate);
+    if (savedImportDate) setLastImportDate(savedImportDate);
+  }, []);
+
+  // Save export date to localStorage
+  useEffect(() => {
+    if (lastExportDate) {
+      localStorage.setItem('lastExportDate', lastExportDate);
+    }
+  }, [lastExportDate]);
+
+  // Save import date to localStorage
+  useEffect(() => {
+    if (lastImportDate) {
+      localStorage.setItem('lastImportDate', lastImportDate);
+    }
+  }, [lastImportDate]);
 
   const handleExport = async () => {
     setIsExporting(true);
@@ -26,8 +51,9 @@ const ImportExportPanel = ({ categories, onImport, isVisible, onToggle }) => {
           linkCount: cat?.linkCount,
           createdAt: cat?.createdAt,
           updatedAt: cat?.updatedAt
-        }))
+        })),
       };
+      setLastExportDate(new Date()?.toISOString());
 
       const blob = new Blob([JSON.stringify(exportData, null, 2)], {
         type: 'application/json'
@@ -82,6 +108,7 @@ const ImportExportPanel = ({ categories, onImport, isVisible, onToggle }) => {
       }));
 
       await onImport(processedCategories);
+      setLastImportDate(new Date()?.toISOString());
       
       // Reset file input
       if (fileInputRef?.current) {
@@ -171,13 +198,15 @@ const ImportExportPanel = ({ categories, onImport, isVisible, onToggle }) => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Export Section */}
-        <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-foreground">Export Categories</h3>
-          <p className="text-sm text-muted-foreground">
-            Download your categories as a JSON file for backup or sharing.
-          </p>
+        <div className="space-y-4 flex flex-col">
+          <div>
+            <h3 className="text-sm font-semibold text-foreground">Export Categories</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Download your categories as a JSON file for backup or sharing.
+            </p>
+          </div>
           
-          <div className="space-y-3">
+          <div className="space-y-3 flex-grow">
             <Button
               variant="default"
               onClick={handleExport}
@@ -217,13 +246,15 @@ const ImportExportPanel = ({ categories, onImport, isVisible, onToggle }) => {
         </div>
 
         {/* Import Section */}
-        <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-foreground">Import Categories</h3>
-          <p className="text-sm text-muted-foreground">
-            Upload a JSON file to import categories into your collection.
-          </p>
+        <div className="space-y-4 flex flex-col">
+          <div>
+            <h3 className="text-sm font-semibold text-foreground">Import Categories</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Upload a JSON file to import categories into your collection.
+            </p>
+          </div>
 
-          <div className="space-y-3">
+          <div className="space-y-3 flex-grow">
             <input
               ref={fileInputRef}
               type="file"
@@ -276,11 +307,11 @@ const ImportExportPanel = ({ categories, onImport, isVisible, onToggle }) => {
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">Last export:</span>
-            <span className="text-foreground">Never</span>
+            <span className="text-foreground">{lastExportDate ? formatRelativeTime(lastExportDate) : "Never"}</span>
           </div>
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">Last import:</span>
-            <span className="text-foreground">Never</span>
+            <span className="text-foreground">{lastImportDate ? formatRelativeTime(lastImportDate) : "Never"}</span>
           </div>
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">Total categories:</span>
