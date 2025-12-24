@@ -49,10 +49,10 @@ const Header = () => {
       tooltip: 'Browse all your saved links'
     },
     {
-      label: 'Categories',
+      label: 'Management',
       path: '/category-management',
       icon: 'Folder',
-      tooltip: 'Manage your link categories'
+      tooltip: 'Manage your links and categories'
     }
   ];
 

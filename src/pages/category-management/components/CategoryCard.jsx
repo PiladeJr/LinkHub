@@ -70,11 +70,15 @@ const CategoryCard = ({
               style={{ backgroundColor: category?.color }}
             >
               {category?.icon ? (
-                <Image 
-                  src={category?.icon} 
-                  alt={category?.name}
-                  className="w-6 h-6 object-cover rounded"
-                />
+                /^https?:\/\/|^data:|^blob:/i.test(category?.icon) ? (
+                  <Image 
+                    src={category?.icon} 
+                    alt={category?.name}
+                    className="w-6 h-6 object-cover rounded"
+                  />
+                ) : (
+                  <Icon name={category?.icon} size={20} color="white" />
+                )
               ) : (
                 <Icon name="Folder" size={20} color="white" />
               )}
