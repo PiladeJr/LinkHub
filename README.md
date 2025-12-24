@@ -30,7 +30,6 @@ Built with the following tools and technologies
 
 ## Table of Contents
 - [Overview](#overview)
-- [Features](#features)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -45,35 +44,10 @@ Built with the following tools and technologies
 - [Acknowledgments](#acknowledgments)
 
 ## Overview
-Soo... this was my very first majour project. I'm still in the process of learning development tools/languages like react, javascript, node, etc. So the application may appear a bit junky and overrall a giant <abbr title="IT IS">spaghetti code</abbr>.</br>
-The main idea and premise of this webapp is to get rid of all the favourite links filling your browser, or having to rely on group pages or notion files filled with barebone links. I wanted to make something more appealing to the human eye and easy to use.</br>
-And that's what this application is all about. 
-A versatile developer toolkit designed to facilitate the creation and management of scalable and maintainable link and categories.
-</br></br> 
-Built with modern technologies like React 18, Vite, Redux Toolkit, TailwindCSS, and React Router, it offers a rich library of reusable UI components and robust data handling features.
-
-<strong>Why LinkHub?</strong>
-<ul class="list-disc pl-4 my-0">
-<li class="my-0"><strong>🌐 Advanced Link &amp; Category Management:</strong> Seamless add/edit, bulk actions, and detailed analytics.</li>
-<li class="my-0"><strong>🧩 Customizable UI Components:</strong> Buttons, Modals, Headers, and more, designed for consistency and accessibility.</li>
-<li class="my-0"><strong>🚀 Performance &amp; Developer Experience:</strong> Optimized workflows with Vite, error boundaries, and utility functions.</li>
-<li class="my-0"><strong>🎨 Consistent Styling &amp; Theming:</strong> TailwindCSS configurations and utility helpers for scalable design.</li>
-<li class="my-0"><strong>📊 Data Visualization &amp; Insights:</strong> Analytics components to monitor usage and trends.</li>
-</ul>
-
-
-## 🚀 Features <a id="features"></a>
-
-- **React 18** - React version with improved rendering and concurrent features
-- **Vite** - Lightning-fast build tool and development server
-- **Redux Toolkit** - State management with simplified Redux setup
-- **TailwindCSS** - Utility-first CSS framework with extensive customization
-- **React Router v6** - Declarative routing for React applications
-- **Data Visualization** - Integrated D3.js and Recharts for powerful data visualization
-- **Form Management** - React Hook Form for efficient form handling
-- **Animation** - Framer Motion for smooth UI animations
-- **Testing** - Jest and React Testing Library setup
-
+Surprised you made it this far! you deserve a reward, here's a [cookie🍪](https://www.youtube.com/watch?v=dQw4w9WgXcQ "you can trust me 😊")
+Like I mentioned before, this branch is for the local json version. It utilizes a server in order to read the changes stored in the browser and overwrite the file saved in the src/data directory.  
+</br>
+For the main version refer to the Master branch
 ## Getting Started
 
 ### 📋 Prerequisites <a id="prerequisites"></a>
