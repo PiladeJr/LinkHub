@@ -319,6 +319,7 @@ const AddEditLinkModal = () => {
         title={isEditing ? 'Edit Link' : 'Add New Link'}
         size="lg"
         className="max-h-[90vh] overflow-y-auto"
+        disableBackgroundInteractions={false}
       >
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* URL Input */}

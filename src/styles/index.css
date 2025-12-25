@@ -11,6 +11,11 @@ body {
   margin: unset;
 }
 
+/* Hide checkboxes when modal is open */
+body.modal-open input[type="checkbox"] {
+  visibility: hidden;
+}
+
 /* Custom Scrollbar Styling */
 /* For Webkit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {

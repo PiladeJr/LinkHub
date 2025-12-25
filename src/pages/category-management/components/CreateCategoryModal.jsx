@@ -178,7 +178,7 @@ const CreateCategoryModal = ({ isOpen, onClose, onSave, editingCategory = null }
                 type="button"
                 onClick={() => handleInputChange('color', color?.value)}
                 className={`
-                  w-10 h-10 rounded-lg border-2 transition-all duration-200
+                  w-10 h-10 rounded-lg border-2 transition-all duration-200 flex items-center justify-center
                   ${formData?.color === color?.value 
                     ? 'border-foreground scale-110' 
                     : 'border-border hover:border-muted-foreground hover:scale-105'
@@ -223,19 +223,16 @@ const CreateCategoryModal = ({ isOpen, onClose, onSave, editingCategory = null }
               </div>
             </div>
           ) : (
-            <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-muted-foreground transition-colors">
+            <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-muted-foreground transition-colors relative">
               <input
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 onChange={handleIconUpload}
-                className="hidden"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 id="icon-upload"
               />
-              <label
-                htmlFor="icon-upload"
-                className="cursor-pointer flex flex-col items-center space-y-2"
-              >
+              <div className="flex flex-col items-center space-y-2 pointer-events-none">
                 <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
                   <Icon name="Upload" size={24} className="text-muted-foreground" />
                 </div>
@@ -243,7 +240,7 @@ const CreateCategoryModal = ({ isOpen, onClose, onSave, editingCategory = null }
                   <p className="text-sm font-medium text-foreground">Upload an icon</p>
                   <p className="text-xs text-muted-foreground">PNG, JPG up to 2MB</p>
                 </div>
-              </label>
+              </div>
             </div>
           )}
           {errors?.icon && (

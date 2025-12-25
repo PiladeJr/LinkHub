@@ -11,7 +11,8 @@ const Modal = ({
   size = 'default',
   showCloseButton = true,
   closeOnBackdrop = true,
-  className = '' 
+  className = '',
+  disableBackgroundInteractions = true
 }) => {
   const modalRef = useRef(null);
   const previousFocusRef = useRef(null);
@@ -29,6 +30,11 @@ const Modal = ({
       previousFocusRef.current = document.activeElement;
       document.body.style.overflow = 'hidden';
       
+      if (disableBackgroundInteractions) {
+        document.body.style.pointerEvents = 'none';
+        document.body.classList.add('modal-open');
+      }
+      
       // Focus the modal after a brief delay to ensure it's rendered
       setTimeout(() => {
         if (modalRef?.current) {
@@ -37,6 +43,10 @@ const Modal = ({
       }, 100);
     } else {
       document.body.style.overflow = 'unset';
+      if (disableBackgroundInteractions) {
+        document.body.style.pointerEvents = 'unset';
+        document.body.classList.remove('modal-open');
+      }
       
       // Return focus to the previously focused element
       if (previousFocusRef?.current) {
@@ -46,8 +56,12 @@ const Modal = ({
 
     return () => {
       document.body.style.overflow = 'unset';
+      if (disableBackgroundInteractions) {
+        document.body.style.pointerEvents = 'unset';
+        document.body.classList.remove('modal-open');
+      }
     };
-  }, [isOpen]);
+  }, [isOpen, disableBackgroundInteractions]);
 
   useEffect(() => {
     const handleEscape = (e) => {
@@ -75,7 +89,7 @@ const Modal = ({
 
   const modalContent = (
     <div 
-      className="fixed inset-0 z-1000 flex items-center justify-center p-4 bg-black/50 animate-fade-in"
+      className="fixed inset-0 z-1000 flex items-center justify-center p-4 bg-black/70 animate-fade-in backdrop-blur-sm"
       onClick={handleBackdropClick}
     >
       {/* Desktop Modal */}
@@ -84,13 +98,14 @@ const Modal = ({
         tabIndex={-1}
         className={`
           hidden sm:block w-full ${sizeClasses?.[size]} bg-card rounded-lg shadow-elevated
-          transform transition-all duration-300 ease-out
+          transform transition-all duration-300 ease-out pointer-events-auto
           ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}
           ${className}
         `}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         {(title || showCloseButton) && (
@@ -114,7 +129,7 @@ const Modal = ({
         )}
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-6 max-h-[calc(90vh-120px)] overflow-y-auto">
           {children}
         </div>
       </div>
@@ -122,7 +137,7 @@ const Modal = ({
       {/* Mobile Modal (Bottom Sheet) */}
       <div 
         className={`
-          sm:hidden fixed inset-x-0 bottom-0 bg-card rounded-t-lg shadow-elevated
+          sm:hidden fixed inset-x-0 bottom-0 bg-card rounded-t-lg shadow-elevated pointer-events-auto
           transform transition-transform duration-300 ease-out
           ${isOpen ? 'translate-y-0' : 'translate-y-full'}
           max-h-[90vh] overflow-y-auto
@@ -131,6 +146,7 @@ const Modal = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title-mobile' : undefined}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Mobile Header */}
         <div className="flex items-center justify-between p-4 border-b border-border sticky top-0 bg-card">
